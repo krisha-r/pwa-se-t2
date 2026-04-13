@@ -6,6 +6,7 @@ app.secret_key = "gtg"
 
 @app.route("/")
 def Home():
-    return render_template("index.html")
+    guessData = db.GetAllGuesses() # Note: the new line
+    return render_template("index.html", guesses=guessData)
 
 app.run(debug=True, port=5000)
