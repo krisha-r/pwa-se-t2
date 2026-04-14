@@ -37,3 +37,16 @@ def RegisterUser(username, password):
     db.execute("INSERT INTO Users(username, password) VALUES(?, ?)", (username, hash,))
     db.commit()
     return True
+
+
+def AddGuess(user_id, date, game, score):
+    # Check if any boxes were empty
+    if date is None or game is None:
+        return False
+    # Get the DB and add the guess
+    db = GetDB()
+    db.execute("INSERT INTO Guesses(user_id, date, game, score) VALUES (?, ?, ?, ?)",
+               (user_id, date, game, score,))
+    db.commit()
+
+    return True
