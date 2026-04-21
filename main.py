@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, send_from_directory
 import db
 
 app = Flask(__name__)
@@ -64,6 +64,10 @@ def Add():
         # Send the data to add our new guess to the db
         db.AddGuess(user_id, date, game, score)
     return render_template("add.html")
+
+@app.route('/static/manifest.json')
+def manifest():
+    return send_from_directory('static', 'manifest.json', mimetype='application/manifest+json')
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
