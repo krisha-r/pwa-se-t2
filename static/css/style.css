@@ -8,7 +8,7 @@ url("https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap");
 }
 
 body {
-    background: #fdfdfd;
+    background: #e8eddf;
     font-family: "Nunito", sans-serif;
     font-size: 1rem;
 }
@@ -23,20 +23,20 @@ main {
 .banner {
     padding: 60px;
     text-align: center;
-    background: #1abc9c;
-    color: white;
+    background: #f5cb5c;
+    color: 242423;
     font-size: 3em;
 }
 
 nav {
     overflow: hidden;
-    background-color: #333;
+    background-color: #333533;
     text-align: center; 
 }
 
 nav a {
     display: inline-block;
-    color: #f2f2f2;
+    color: #cfdbd5;
 
     padding: 14px 16px;
     text-decoration: none;
@@ -50,7 +50,7 @@ nav a:hover {
 
 nav a.active {
     background-color: #04AA6D;
-    color: white;
+    color: #e8eddf;
 }
 
 /* .container {
@@ -63,20 +63,20 @@ nav a.active {
 }
 
 .guess_table td, .guess_table th {
-    border: 1px solid #ddd;
+    border: 1px solid #e8eddf;
     padding: 8px;
 }
 
-.guess_table tr:nth-child(even){background-color: #f2f2f2;}
+.guess_table tr:nth-child(even){background-color: #cfdbd5;}
 
-.guess_table tr:hover {background-color: #ddd;}
+.guess_table tr:hover {background-color: #cfdbd5;}
 
 .guess_table th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #1abc9c;
-    color: white;
+    background-color: #f5cb5c;
+    color: cfdbd5;
 }
 
 input[type=text], input[type="password"], input[type="date"], input[type="number"], select {
@@ -91,8 +91,8 @@ input[type=text], input[type="password"], input[type="date"], input[type="number
 
 input[type=submit] {
     width: 100%;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #f5cb5c;
+    color: 333533;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
@@ -102,12 +102,12 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-    background-color: #45a049;
+    background-color: #f5cb5c;
 }
 
 button {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #f5cb5c;
+    color: 333533;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
