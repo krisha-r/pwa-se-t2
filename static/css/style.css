@@ -7,6 +7,10 @@ url("https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap");
     box-sizing: border-box;
 }
 
+.bolded {
+    font-weight: bold;
+}
+
 body {
     background: #e8eddf;
     font-family: "Nunito", sans-serif;
@@ -114,4 +118,5 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 1.05em;
+    font-weight: bold;
 }

@@ -10,7 +10,7 @@ def GetDB():
 def GetAllGuesses():
     # Connect, query all guesses and then return the data
     db = GetDB()
-    guesses = db.execute("""SELECT Guesses.date, Guesses.game, Guesses.score, Users.username
+    guesses = db.execute("""SELECT Guesses.date, Guesses.game, Guesses.score, UPPER(SUBSTR(Users.username, 1, 1)) || LOWER(SUBSTR(Users.username, 2)) AS username
                             FROM Guesses JOIN Users ON Guesses.user_id = Users.id
                             ORDER BY date DESC""").fetchall()
     db.close()

@@ -7,7 +7,10 @@ app.secret_key = "gtg"
 @app.route("/")
 def Home():
     guessData = db.GetAllGuesses() # Note: the new line
-    return render_template("index.html", guesses=guessData)
+    username = 'there'
+    if session.get('username'):
+        username = session['username'].title()
+    return render_template("index.html", guesses=guessData, name=username)
 
 @app.route("/login", methods=["GET", "POST"])
 def Login():
@@ -15,6 +18,7 @@ def Login():
         return redirect("/")
     if request.method == "POST":
         username = request.form['username']
+        username = username.lower()
         password = request.form['password']
 
         # Did they provide good details
@@ -40,6 +44,7 @@ def Register():
     # If they click the submit button, let's register
     if request.method == "POST":
         username = request.form['username']
+        username = username.lower()
         password = request.form['password']
 
         # Try and add them to the DB
