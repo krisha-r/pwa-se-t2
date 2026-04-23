@@ -36,8 +36,13 @@ def RegisterUser(username, password):
     # Attempt to add them to the database
     db = GetDB()
     hash = generate_password_hash(password)
-    db.execute("INSERT INTO Users(username, password) VALUES(?, ?)", (username, hash,))
-    db.commit()
+    try:
+        db.execute("INSERT INTO Users(username, password) VALUES(?, ?)", (username, hash,))
+        db.commit()
+    except sqlite3.IntegrityError as e:
+        print(f"Error: {e}. This username is already taken.")
+        db.rollback()
+        return False
     return True
 
 
@@ -47,6 +52,7 @@ def AddGuess(user_id, date, game, score):
         return False
     # Get the DB and add the guess
     db = GetDB()
+    
     db.execute("INSERT INTO Guesses(user_id, date, game, score) VALUES (?, ?, ?, ?)",
                (user_id, date, game, score,))
     db.commit()

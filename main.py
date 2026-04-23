@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, send_from_directory
+from flask import Flask, render_template, request, redirect, session, send_from_directory, flash
 import db
 
 app = Flask(__name__)
@@ -6,10 +6,11 @@ app.secret_key = "gtg"
 
 @app.route("/")
 def Home():
-    guessData = db.GetAllGuesses() # Note: the new line
     username = 'there'
+    guessData = ""
     if session.get('username'):
         username = session['username'].title()
+        guessData = db.GetAllGuesses() # Note: the new line
     return render_template("index.html", guesses=guessData, name=username)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -30,6 +31,8 @@ def Login():
 
             # Send them back to the homepage
             return redirect("/")
+        else:
+            flash("Your username or password was incorrect")
     return render_template("login.html")
 
 @app.route("/logout")
@@ -51,6 +54,9 @@ def Register():
         if db.RegisterUser(username, password):
             # Success! Let's go to the homepage
             return redirect("/")
+        else:
+            flash("This username is already taken")
+            
         
     return render_template("register.html")
 

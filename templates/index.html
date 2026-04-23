@@ -8,10 +8,14 @@
     <a href="https://guessthe.game/">GuessThe.Game</a> and scream their
     suggestions at the host. Let's start tracking their progress.
   </p>
+
   {% if session['username'] %}
   <br />
   <p class="bolded">Hello {{name}}</p>
   <a href="/add"><button>Add guess</button></a>
+  {%else%}
+  <br />
+  <p class="bolded">Please log in to view table</p>
   {% endif %}
 </div>
 
