@@ -2,40 +2,43 @@
 
 <div class="container">
   <p>
-    Welcome to GuessThe.Game Database (aka. GTGDB). This website is dedicated to
-    the hard working Year 12 SE students of 2024-2025. The last 5 minutes of
-    class are always a flurry of excitement and hard work. They open
-    <a href="https://guessthe.game/">GuessThe.Game</a> and scream their
-    suggestions at the host. Let's start tracking their progress.
+    Welcome to Lights, Camera, Action. This website is a fun junction for movie
+    and tv show fantatics and want to review or rant about they're favourite or
+    least favourite movies and tv shoes to fans and haters alike
   </p>
 
   {% if session['username'] %}
   <br />
   <p class="bolded">Hello {{name}}</p>
-  <a href="/add"><button>Add guess</button></a>
+  <a href="/add"><button>Add Review</button></a>
   {%else%}
   <br />
-  <p class="bolded">Please log in to view table</p>
+  <p class="bolded">
+    Please log in to view other people's favourite/least favourite movies and tv
+    shows
+  </p>
   {% endif %}
 </div>
 
 <br />
 
-<table class="guess_table">
+<table class="review_table">
   <thead>
-    <th>Date</th>
-    <th>User who guessed</th>
-    <th>Game</th>
-    <th>Score</th>
+    <th class="date">Date</th>
+    <th>User who reviewed</th>
+    <th class="movie">Movie/TV Show</th>
+    <th>Rating</th>
+    <th>Review</th>
   </thead>
 
   <tbody>
-    {% for guess in guesses %}
+    {% for review in reviews %}
     <tr>
-      <td>{{ guess['date'] }}</td>
-      <td>{{ guess['username'] }}</td>
-      <td>{{ guess['game'] }}</td>
-      <td>{{ guess['score'] }}</td>
+      <td>{{ review['date'] }}</td>
+      <td>{{ review['username'] }}</td>
+      <td>{{ review['movie_show'] }}</td>
+      <td>{{ review['rating'] }}</td>
+      <td>{{ review['review'] }}</td>
     </tr>
     {% endfor %}
   </tbody>

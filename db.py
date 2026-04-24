@@ -4,21 +4,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 def GetDB():
     # Create a function to connect to the created database
-    db = sqlite3.connect(".database/gtg.db")
+    db = sqlite3.connect(".database/lca.db")
     #Allow the access of the rows in the database using their value
     db.row_factory = sqlite3.Row
     #Return the database
     return db
 
-def GetAllGuesses():
+def GetAllReviews():
     # Run the GetDB() and connect to the database
     db = GetDB()
     #Fetch all the data from the guesses table
-    #Join the guesses and user table using the user id
+    #Join the reviews and user table using the user id
     #Title case the username, by making the first letter uppercase and the rest of the username lowercase
     #Order the data in descending order by date
-    guesses = db.execute("""SELECT Guesses.date, Guesses.game, Guesses.score, UPPER(SUBSTR(Users.username, 1, 1)) || LOWER(SUBSTR(Users.username, 2)) AS username
-                            FROM Guesses JOIN Users ON Guesses.user_id = Users.id
+    guesses = db.execute("""SELECT Reviews.date, Reviews.movie_show, Reviews.rating, Reviews.review, UPPER(SUBSTR(Users.username, 1, 1)) || LOWER(SUBSTR(Users.username, 2)) AS username
+                            FROM Reviews JOIN Users ON Reviews.user_id = Users.id
                             ORDER BY date DESC""").fetchall()
     #Close the connection to the database
     db.close()
@@ -68,19 +68,19 @@ def RegisterUser(username, password):
     #Return true if this error is not picked up; the username and password were added into the database
     return True
 
-#Create a function to add user guesses into the database
-def AddGuess(user_id, date, game, score):
+#Create a function to add user reviews into the database
+def AddReview(user_id, date, movie_show, rating, review):
     # Check and ensure that the none of the entries are empty
-    if date is None or game is None or score is None:
+    if date is None or movie_show is None or rating is None:
         return False
     # Run the GetDB() and connect to the database
     db = GetDB()
     
-    #Add the user_id, date, game and score into the guesses database
-    db.execute("INSERT INTO Guesses(user_id, date, game, score) VALUES (?, ?, ?, ?)",
-               (user_id, date, game, score,))
+    #Add the user_id, date, movie_score, rating, review into the reviews database
+    db.execute("INSERT INTO Reviews(user_id, date, movie/show, rating, review) VALUES (?, ?, ?, ?)",
+               (user_id, date, movie_show, rating, review))
     #Commit the changes to the database
     db.commit()
     
-    #Return true signalling that the guess added into the table
+    #Return true signalling that the review added into the table
     return True

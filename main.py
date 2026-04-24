@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, session, send_from_directory, flash
+from flask import Flask, render_template, request, redirect, session, flash
 import db
 
 #Activate Flask app
 app = Flask(__name__)
 #Create app secret key
-app.secret_key = "gtg"
+app.secret_key = "lca"
 
 
 #Create home page for PWA
@@ -12,17 +12,17 @@ app.secret_key = "gtg"
 def Home():
     #Create blank username and guess data
     username = ''
-    guessData = ""
+    ReviewData = ""
     #Check if the user is logged in
     if session.get('username'):
         #If ther user is logged in then title case their username
         username = session['username'].title()
-        #Fetch all guesses from the guesses database using GetAllGuesses function from db.py
-        guessData = db.GetAllGuesses() # Note: the new line
-    #Render the index.html page, and send through the parameters guessData and username
-    #The guessdata will display the table
+        #Fetch all guesses from the guesses database using GetAllReviews function from db.py
+        ReviewData = db.GetAllReviews() # Note: the new line
+    #Render the index.html page, and send through the parameters ReviewData and username
+    #The Reviewdata will display the table
     #The username, if logged in, will display the username on the home page
-    return render_template("index.html", guesses=guessData, name=username)
+    return render_template("index.html", reviews=ReviewData, name=username)
 
 #Create the login page for the PWA, the get request will retrieve data(the login page) and the post request will send through the username and password
 @app.route("/login", methods=["GET", "POST"])
@@ -90,7 +90,7 @@ def Register():
     #Render the template register.html
     return render_template("register.html")
 
-#Create the add guess page for the PWA, the get request will retrieve the data(add guess data) and the post request will send through the guess details
+#Create the add guess page for the PWA, the get request will retrieve the data(add review data) and the post request will send through the guess details
 @app.route("/add", methods=["GET","POST"])
 def Add():
     # Check if the user is logged in
@@ -103,10 +103,11 @@ def Add():
         #Collect the data the user submitted, including the user id from the session id, the date, the game name and the score
         user_id = session['id']
         date = request.form['date']
-        game = request.form['game']
-        score = request.form['score']
-        # Add the data to the guesses database using the AddGuess function from db.py
-        db.AddGuess(user_id, date, game, score)
+        movie_show = request.form['movie/show']
+        rating = request.form['rating']
+        review = request.form['review']
+        # Add the data to the review database using the AddReview function from db.py
+        db.AddReview(user_id, date, movie_show, rating, review)
     #Render the template add.html
     return render_template("add.html")
 
