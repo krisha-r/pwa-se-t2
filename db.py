@@ -85,31 +85,46 @@ def AddReview(user_id, movie_show, format, rating, review):
     #Return true signalling that the review added into the table
     return True
 
-
+#Create a function to allow users to update their older reviews
 def UpdateReview(user_id, movie_show, format, rating, review, id):
+    # If the user has not provided the movie/show name and the rating then return back False
     if  movie_show is None or rating is None:
         return False
+    # Run the GetDB() and connect to the database
     db = GetDB()
+    #From the reviews table, update the user_id, movie_show, format, rating and review fields using the input provdied by the user in the form
+    # Find the review with the same id as the one provided and then update the table
     db.execute("""UPDATE Reviews
                SET user_id=?, movie_show=?, format=?, rating=?, review=?
                WHERE Reviews.id = ?""",
               (user_id, movie_show, format, rating, review, id))
+    # Commit the changes to the database
     db.commit()
+    #Return true to indicate that the review was updated
     return True
 
-
+# Create a function to get one review from the table using an id
 def GetOneReview(id):
+    # Run the GetDB() and connect to the database
     db = GetDB()
+    # To the variable review, save the entry that is fetched from the reviews table using the id provided
     review = db.execute("SELECT * FROM Reviews WHERE id=?", (id,)).fetchone()
+    #Close the database
     db.close()
+    #Return the review back to the main PWA
     return review
 
 
+#Create a function to delete a user review based on the id the user provides
 def DeleteReview(id):
+    # Run the GetDB() and connect to the database
     db = GetDB()
+    #From the reviews table remove the row depending on the id number
     db.execute("""DELETE FROM Reviews
                WHERE Reviews.id = ?""", (id,))
+    #Commit the changes to the database
     db.commit()
+    #Return true indicating that the review was deleted
     return True
 
     

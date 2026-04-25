@@ -90,7 +90,7 @@ def Register():
     #Render the template register.html
     return render_template("register.html")
 
-#Create the add guess page for the PWA, the get request will retrieve the data(add review data) and the post request will send through the guess details
+#Create the add view page for the PWA, the get request will retrieve the data(add review data) and the post request will send through the review details
 @app.route("/add", methods=["GET","POST"])
 def Add():
     # Check if the user is logged in
@@ -101,62 +101,81 @@ def Add():
     # Check if the user submitted the form
     if request.method == "POST":
         #Collect the data the user submitted, including the user id from the session id, the date, the game name and the score
-        
         user_id = session['id']
         movie_show = request.form['movie_show']
         format = request.form['format']
         rating = request.form['rating']
         review = request.form['review']
-        print("hello")
         # Add the data to the review database using the AddReview function from db.py
         db.AddReview(user_id, movie_show, format, rating, review)
+        return redirect("/")
     #Render the template add.html
     return render_template("add.html")
 
+#Create the edit review webpage for the PWA. The get request will retrieve the data(review data) and the post request will send through the new review data
 @app.route("/edit", methods=["GET", "POST"])
 def Edit():
+    #if the user is not signed in, then the user will be directed back to the home page
     if session.get('username') == None:
-        return redirect("/")
+        return redirect("/")    
     
-    # query = int(request.args.get('q'))
-    
-            
+    #Checks if the user submitted the form
     if request.method == 'POST':
+        #If the user has submitted the form
+        #Collect the review id from the form
         query = int(request.form['id'])
+        #Collect the user id
         user_id = session['id']
+        #Collect the movie and review details
         movie_show = request.form['movie_show']
         format = request.form['format']
         rating = request.form['rating']
         review = request.form['review']
+        # Update the review data using the UpdateReview function from db.py
         db.UpdateReview(user_id, movie_show, format, rating, review, id=query)
+        #Redirect user back to home page
         return redirect("/")
     else:
+        #If the user hasn't submitted the form yet
+        #Collect the review id from the url
         raw_query = request.args.get('q')
         try:
+            # Try and convert the query into a integer
             query = int(raw_query)
+            #Get the corresponding review from the database using the GetOneReview function from db.py
             review = db.GetOneReview(id=query)
+            #If the user id from the review and the session user id don't match then redirect the user back to home page
             if review['user_id'] != session['id']:
                 return redirect("/")
         except:
+            # If an error is detected when trying to convert the query into an integer; e.g. the url doesn't collect a integer
+            # Then redirect user to home page
             return redirect("/")
-    
+    # Render the edit.html template and push through the review data into the html page
     return render_template("edit.html", review=review)
       
-
+# Create the delete review webpage to allow users to delete their reviews
 @app.route("/delete")
 def Delete():
+    # If the user is not logged in then redirect them back to the home page
     if session.get('username') == None:
         return redirect("/")
+    #Get the reviwe number from the url
     raw_query = request.args.get('q')
     try:
+        # Try and convert the review number into an integer
         query = int(raw_query)
+        # Get the corresponding review from the database by using the function from db.py
         review = db.GetOneReview(id=query)
+        # If the user id from the review and the session id don't match then redirect user to home page
         if review['user_id'] != session['id']:
             return redirect("/")
+        # Using the DeleteReview function from the db.py, pass through the id parameter and delete the entry
         db.DeleteReview(id=query)
     except Exception as e:
-        print(e)
+        # If an error is caught, e.g. trying to convert the query into an integer then redirect user back to home page
         return redirect("/")
+    # If the review is deleted then redirect user back to home page
     return redirect("/")
     
 
