@@ -2,9 +2,18 @@
 <h2>Register</h2>
 <form action="/register" method="post">
   <label>Username: </label>
-  <input type="text" name="username" id="username" />
+  <input type="text" name="username" id="username" maxlenght="25" required />
   <label>Password: </label>
-  <input type="password" name="password" id="password" />
+  <input
+    type="password"
+    name="password"
+    id="password"
+    minlength="8"
+    maxlenght="25"
+    required
+    pattern="(?=.*[!@#$%^&*_\-]).{8,}"
+    title="Must contain at least one special character (!@#$%^&*_-) and be at least 8 characters long."
+  />
   <p>*password is case-sensitive</p>
   <input type="submit" value="Register" />
 </form>
