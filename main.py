@@ -18,7 +18,7 @@ def Home():
         #If ther user is logged in then title case their username
         username = session['username'].title()
         #Fetch all guesses from the guesses database using GetAllReviews function from db.py
-        ReviewData = db.GetAllReviews() # Note: the new line
+        ReviewData = db.GetAllReviews()
     #Render the index.html page, and send through the parameters ReviewData and username
     #The Reviewdata will display the table
     #The username, if logged in, will display the username on the home page
@@ -101,15 +101,65 @@ def Add():
     # Check if the user submitted the form
     if request.method == "POST":
         #Collect the data the user submitted, including the user id from the session id, the date, the game name and the score
+        
         user_id = session['id']
-        date = request.form['date']
-        movie_show = request.form['movie/show']
+        movie_show = request.form['movie_show']
+        format = request.form['format']
         rating = request.form['rating']
         review = request.form['review']
+        print("hello")
         # Add the data to the review database using the AddReview function from db.py
-        db.AddReview(user_id, date, movie_show, rating, review)
+        db.AddReview(user_id, movie_show, format, rating, review)
     #Render the template add.html
     return render_template("add.html")
+
+@app.route("/edit", methods=["GET", "POST"])
+def Edit():
+    if session.get('username') == None:
+        return redirect("/")
+    
+    # query = int(request.args.get('q'))
+    
+            
+    if request.method == 'POST':
+        query = int(request.form['id'])
+        user_id = session['id']
+        movie_show = request.form['movie_show']
+        format = request.form['format']
+        rating = request.form['rating']
+        review = request.form['review']
+        db.UpdateReview(user_id, movie_show, format, rating, review, id=query)
+        return redirect("/")
+    else:
+        raw_query = request.args.get('q')
+        try:
+            query = int(raw_query)
+            review = db.GetOneReview(id=query)
+            if review['user_id'] != session['id']:
+                return redirect("/")
+        except:
+            return redirect("/")
+    
+    return render_template("edit.html", review=review)
+      
+
+@app.route("/delete")
+def Delete():
+    if session.get('username') == None:
+        return redirect("/")
+    raw_query = request.args.get('q')
+    try:
+        query = int(raw_query)
+        review = db.GetOneReview(id=query)
+        if review['user_id'] != session['id']:
+            return redirect("/")
+        db.DeleteReview(id=query)
+    except Exception as e:
+        print(e)
+        return redirect("/")
+    return redirect("/")
+    
+
 
 # if the is being run by python then the __name__ become __main__
 if __name__ == "__main__":

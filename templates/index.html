@@ -10,12 +10,12 @@
   {% if session['username'] %}
   <br />
   <p class="bolded">Hello {{name}}</p>
-  <a href="/add"><button>Add Review</button></a>
+  <a class="addbutton" href="/add"><button>Add Review</button></a>
   {%else%}
   <br />
   <p class="bolded">
-    Please log in to view other people's favourite/least favourite movies and tv
-    shows
+    Please log in to view other people's favourite(or least favourite) movies
+    and tv shows
   </p>
   {% endif %}
 </div>
@@ -24,20 +24,35 @@
 
 <table class="review_table">
   <thead>
-    <th class="date">Date</th>
+    <th class="edit">Edit/Delete</th>
     <th>User who reviewed</th>
-    <th class="movie">Movie/TV Show</th>
-    <th>Rating</th>
+    <th class="movie">Name</th>
+    <th>Movie or TV Show</th>
+    <th>Rating(out of 5)</th>
     <th>Review</th>
   </thead>
 
   <tbody>
     {% for review in reviews %}
     <tr>
-      <td>{{ review['date'] }}</td>
+      {% if session['username'] == review['username'].lower()%}
+      <td>
+        <a href="{{ url_for('Edit', q=review['id']) }}"
+          ><button class="button">Edit Review</button></a
+        >
+        <a href="{{ url_for('Delete', q=review['id']) }}"
+          ><button class="button">Delete Review</button></a
+        >
+      </td>
+
+      {%else%}
+      <td></td>
+
+      {%endif%}
       <td>{{ review['username'] }}</td>
       <td>{{ review['movie_show'] }}</td>
-      <td>{{ review['rating'] }}</td>
+      <td>{{ review['format'] }}</td>
+      <td>{{ review['rating']*"⭐" }}</td>
       <td>{{ review['review'] }}</td>
     </tr>
     {% endfor %}

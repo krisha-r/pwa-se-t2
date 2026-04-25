@@ -17,9 +17,9 @@ def GetAllReviews():
     #Join the reviews and user table using the user id
     #Title case the username, by making the first letter uppercase and the rest of the username lowercase
     #Order the data in descending order by date
-    guesses = db.execute("""SELECT Reviews.date, Reviews.movie_show, Reviews.rating, Reviews.review, UPPER(SUBSTR(Users.username, 1, 1)) || LOWER(SUBSTR(Users.username, 2)) AS username
+    guesses = db.execute("""SELECT Reviews.id, Reviews.user_id, Reviews.movie_show, Reviews.format, Reviews.rating, Reviews.review, UPPER(SUBSTR(Users.username, 1, 1)) || LOWER(SUBSTR(Users.username, 2)) AS username
                             FROM Reviews JOIN Users ON Reviews.user_id = Users.id
-                            ORDER BY date DESC""").fetchall()
+                            ORDER BY rating DESC""").fetchall()
     #Close the connection to the database
     db.close()
     #Return the guesses
@@ -69,18 +69,49 @@ def RegisterUser(username, password):
     return True
 
 #Create a function to add user reviews into the database
-def AddReview(user_id, date, movie_show, rating, review):
+def AddReview(user_id, movie_show, format, rating, review):
     # Check and ensure that the none of the entries are empty
-    if date is None or movie_show is None or rating is None:
+    if  movie_show is None or rating is None:
         return False
     # Run the GetDB() and connect to the database
     db = GetDB()
     
-    #Add the user_id, date, movie_score, rating, review into the reviews database
-    db.execute("INSERT INTO Reviews(user_id, date, movie/show, rating, review) VALUES (?, ?, ?, ?)",
-               (user_id, date, movie_show, rating, review))
+    #Add the user_id, movie_score, rating, review into the reviews database
+    db.execute("INSERT INTO Reviews(user_id, movie_show, format, rating, review) VALUES (?, ?, ?, ?, ?)",
+               (user_id, movie_show, format, rating, review))
     #Commit the changes to the database
     db.commit()
     
     #Return true signalling that the review added into the table
     return True
+
+
+def UpdateReview(user_id, movie_show, format, rating, review, id):
+    if  movie_show is None or rating is None:
+        return False
+    db = GetDB()
+    db.execute("""UPDATE Reviews
+               SET user_id=?, movie_show=?, format=?, rating=?, review=?
+               WHERE Reviews.id = ?""",
+              (user_id, movie_show, format, rating, review, id))
+    db.commit()
+    return True
+
+
+def GetOneReview(id):
+    db = GetDB()
+    review = db.execute("SELECT * FROM Reviews WHERE id=?", (id,)).fetchone()
+    db.close()
+    return review
+
+
+def DeleteReview(id):
+    db = GetDB()
+    db.execute("""DELETE FROM Reviews
+               WHERE Reviews.id = ?""", (id,))
+    db.commit()
+    return True
+
+    
+    
+    

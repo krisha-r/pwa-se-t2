@@ -1,6 +1,21 @@
 {% extends "base.html" %} {% block content %}
-<h2>Add a new Review</h2>
-<form action="/add" method="post">
+
+<h2>Edit your Review</h2>
+<br />
+<h3>Current Review</h3>
+<p class="bolded">
+  Movie/TV Show: {{ review['movie_show'] }}
+  <br />
+  Format: {{ review['format'] }}
+  <br />
+  Rating: {{ review['rating']*"⭐" }} <br />
+  Review: {{ review['review'] }}
+</p>
+
+<br />
+<br />
+
+<form action="/edit" method="post">
   <label>Movie/TV Show Name: </label>
   <input type="text" name="movie_show" id="movie_show" />
   <label for="Format">Movie or TV Show: </label>
@@ -18,6 +33,7 @@
   </select>
   <label>Review: </label>
   <input type="text" name="review" id="review" />
-  <input type="submit" value="Add review" />
+  <input type="hidden" name="id" value="{{ review['id'] }}" />
+  <input type="submit" value="Edit review" />
 </form>
 {% endblock %}
