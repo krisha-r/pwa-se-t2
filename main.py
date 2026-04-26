@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect, session, flash
 import db
+from flask_bcrypt import Bcrypt
 
 #Activate Flask app
 app = Flask(__name__)
 #Create app secret key
 app.secret_key = "lca"
+bcrypt = Bcrypt(app)
 
 
 #Create home page for PWA

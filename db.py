@@ -1,5 +1,6 @@
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+from main import bcrypt
 
 
 def GetDB():
@@ -35,7 +36,8 @@ def CheckLogin(username, password):
     if user is not None:
         # If the user provided the right username, then check if the password is right
         # Hash the password provided and check if it matches the password in the database
-        if check_password_hash(user['password'], password):
+        # Use flask bcrypt to hash the password for better security
+        if bcrypt.check_password_hash(pw_hash=user['password'], password=password):
             # They got it right, return their details 
             #If the password matches then return the user details, including user id, username and password
             return user
@@ -50,8 +52,8 @@ def RegisterUser(username, password):
         return False
     # Run the GetDB() and connect to the database
     db = GetDB()
-    #Hash the password provided by the user
-    hash = generate_password_hash(password)
+    #Hash the password provided by the user using flask bcrypt 
+    hash = bcrypt.generate_password_hash(password=password)
     
     
     try:
